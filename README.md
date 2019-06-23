@@ -40,10 +40,16 @@ docker run -d -p 8090:8090 --name moc_chat moc_chat:1.0.0
     }
 ```
 
-
 ## TODOs list
 * Change WebSocket port to 1030
 * Implement constraints validation for password and userName
 * Create new entity to save user credentials. User service should retrieve Entity without password.
 * Send message to specific group of users by roomId
 * Review and check exception handling
+* Add payload logging
+* Add certificate to support https
+
+## Notes
+For some reasons in docker-compose password matchers does not work.
+
+It strange because it works well on when I run jar file on local machine 

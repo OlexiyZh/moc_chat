@@ -1,10 +1,22 @@
 version: '3'
 services:
+  moc_chat:
+    image: moc_chat:1.0.0
+    ports:
+      - 8090:8090
+    environment:
+      - DB_URL=jdbc:postgresql://database:5432/chat
+    links:
+      - "dbchat:database"
+    networks:
+      - common
   dbchat:
     image: postgres:11
     restart: always
     ports:
       - 5432:5432
+    expose:
+      - 5432
     environment:
       POSTGRES_USER: chatuser
       POSTGRES_PASSWORD: qwerty12345
