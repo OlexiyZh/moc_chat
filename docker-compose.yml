@@ -1,20 +1,16 @@
 version: '3'
 services:
-  moc_chat:
-    image: moc_chat:1.0.0
-    ports:
-      - 8090:8090
-    networks:
-      - common
   dbchat:
     image: postgres:11
     restart: always
     ports:
       - 5432:5432
     environment:
-      POSTGRES_USER: user
+      POSTGRES_USER: chatuser
       POSTGRES_PASSWORD: qwerty12345
       POSTGRES_DB: chat
+    volumes:
+      - ./create.sql:/docker-entrypoint-initdb.d/create.sql
     networks:
       - common
 networks:

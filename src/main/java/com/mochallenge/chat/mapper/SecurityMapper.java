@@ -5,7 +5,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
 
 import com.mochallenge.chat.controller.dto.LoginUserResponse;
-import com.mochallenge.chat.domain.User;
+import com.mochallenge.chat.service.SecurityService;
 
 @Mapper
 public abstract class SecurityMapper {
@@ -15,6 +15,6 @@ public abstract class SecurityMapper {
             @Mapping(target = "userName", source = "user.userName"),
             @Mapping(target = "credentials", source = "credentials")
     })
-    public abstract LoginUserResponse toLoginUserResponse(User user, String credentials);
+    public abstract LoginUserResponse toLoginUserResponse(SecurityService.UserLoggedInModel userLoggedInModel);
 
 }

@@ -41,9 +41,9 @@ public class UsersController {
 
     @PostMapping("/login")
     public LoginUserResponse loginUser(@RequestBody LoginUserRequest loginUserRequest) {
-        User user = userService.getUserByUserName(loginUserRequest.getUserName());
-        String credentials = securityService.login(loginUserRequest.getUserName(), loginUserRequest.getPassword());
-        return securityMapper.toLoginUserResponse(user, credentials);
+        SecurityService.UserLoggedInModel userLoggedInModel =
+                securityService.login(loginUserRequest.getUserName(), loginUserRequest.getPassword());
+        return securityMapper.toLoginUserResponse(userLoggedInModel);
     }
 
     @GetMapping()
