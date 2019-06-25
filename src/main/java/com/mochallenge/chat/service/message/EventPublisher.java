@@ -11,9 +11,10 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class EventPublisher {
 
-    private final SimpMessageSendingOperations messagingTemplate;
+    /*private final SimpMessageSendingOperations messagingTemplate;
 
     public void publicEvent(ChatEvent event) {
         messagingTemplate.convertAndSend("/topic", event);
-    }
+        messagingTemplate.convertAndSendToUser("user1", "/topic", event);
+    }*/
 }
