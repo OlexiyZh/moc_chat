@@ -3,7 +3,6 @@ package com.mochallenge.chat.service;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import com.google.common.collect.Lists;

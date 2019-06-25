@@ -17,11 +17,13 @@ Next env variables can be overrided:
 
 ## Docker commands
 
-
 ```
 docker build -t moc_chat:1.0.0 .
 
 docker run -d -p 8090:8090 --name moc_chat moc_chat:1.0.0
+
+docker-compose up
+docker-compose -f docker-compose_db.yml up
 ```
 
 ## STOMP Client
