@@ -32,7 +32,7 @@ we need to run Chrome browser with next flag
 ```
 
 ```
-var ws = new WebSocket('ws://localhost:8090/ws?x-user-id=<userId>');
+var ws = new WebSocket('wss://localhost:8090/ws?x-user-id=<userId>');
 ws.onmessage = function(data) {
     console.log(data.data);
 };
