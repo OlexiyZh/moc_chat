@@ -1,11 +1,14 @@
 package com.mochallenge.chat.config;
 
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
@@ -13,51 +16,68 @@ import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mochallenge.chat.service.message.IEventPublisher;
+import com.mochallenge.chat.service.message.EventPublisher;
 import com.mochallenge.chat.service.message.event.ChatEvent;
 
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import lombok.extern.log4j.Log4j2;
 
 @Component
+@Log4j2
 @RequiredArgsConstructor
-public class ChatWebSocketHandler extends TextWebSocketHandler implements IEventPublisher {
+public class ChatWebSocketHandler extends TextWebSocketHandler implements EventPublisher {
+
+    private static final Pattern QUERY_PARAM_PATTERN = Pattern.compile("(?<=x-user-id=)[^&]+");
 
     private final ObjectMapper objectMapper;
 
     private Map<String, WebSocketSession> sessions = new ConcurrentHashMap();
 
+    @SneakyThrows
     public void afterConnectionEstablished(WebSocketSession session) {
         String xUserId = getUserId(session);
+        if(StringUtils.isBlank(xUserId)) {
+            // close session because mandatory parameter is missing
+            session.close(CloseStatus.BAD_DATA);
+        }
         sessions.put(xUserId, session);
     }
 
 
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) {
         String xUserId = getUserId(session);
+        // connection will always contains query param in uri
+        // we validate it in afterConnectionEstablished method
         sessions.remove(xUserId);
     }
 
-    @Override
-    @SneakyThrows
-    public void publicEvent(ChatEvent event, List<String> subscribers) {
-        for (String subscriber : subscribers) {
+    private String getUserId(WebSocketSession session) {
+        String query = session.getUri().getQuery();
+        Matcher matcher = QUERY_PARAM_PATTERN.matcher(query);
+        if(matcher.find()) {
+            return matcher.group();
+        }
+        return null;
+    }
 
-            if (sessions.containsKey(subscriber)) {
-                WebSocketSession session = sessions.get(subscriber);
-                session.sendMessage(prepareMessage(event));
+    @Override
+    public void publishEvent(ChatEvent event, List<String> recipients) {
+        for (String recipient : recipients) {
+            if (sessions.containsKey(recipient)) {
+                WebSocketSession session = sessions.get(recipient);
+                try {
+                    session.sendMessage(buildTextMessage(event));
+                } catch (IOException e) {
+                    log.error("Error sending message to user with id [" + recipient + "]", e);
+                }
             }
         }
     }
 
     @SneakyThrows
-    private TextMessage prepareMessage(ChatEvent event) {
+    private TextMessage buildTextMessage(ChatEvent event) {
         return new TextMessage(objectMapper.writeValueAsString(event));
     }
 
-    private String getUserId(WebSocketSession session) {
-        String query = session.getUri().getQuery();
-        //TODO: validate session
-        return query.replaceFirst("x-user-id=", "");
-    }
 }
