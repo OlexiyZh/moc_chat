@@ -29,29 +29,20 @@ docker-compose -f docker-compose_db.yml up
 ## STOMP Client
 
 ```
-    var socket = new SockJS('http://localhost:8090/ws');
-    stompClient = Stomp.over(socket);
-
-    stompClient.connect(onConnected, onError);
-    
-    stompClient.subscribe('/topic', onMessageReceived);
-    
-    function onMessageReceived(payload) {
-        var message = JSON.parse(payload.body);
-        console.log(message);
-    }
+    var ws = new WebSocket('ws://localhost:8090/ws?x-user-id=<userId>');
+    ws.onmessage = function(data) {
+        console.log(data.data);
+    };
 ```
 
 ## TODOs list
 * Change WebSocket port to 1030
-* Implement constraints validation for password and userName
 * Create new entity to save user credentials. User service should retrieve Entity without password.
-* Send message to specific group of users by roomId
 * Review and check exception handling
 * Add payload logging
-* Add certificate to support https
+* Can't connect to ws with SSL
 
 ## Notes
 For some reasons in docker-compose password matchers does not work.
 
-It strange because it works well on when I run jar file on local machine 
+It's strange because it works well on when I run jar file on local machine
