@@ -20,13 +20,18 @@ Next env variables can be overrided:
 ```
 docker build -t moc_chat:1.0.0 .
 
-docker run -d -p 8090:8090 --name moc_chat moc_chat:1.0.0
+docker run -d -p 8090:8090 -p 1030:8090 --name moc_chat moc_chat:1.0.0
 
 docker-compose up
 docker-compose -f docker-compose_db.yml up
 ```
 
-## STOMP Client
+## WS Client
+To be able to connect from Chrom to our application without checking SSL certificates
+we need to run Chrom browser with next flag
+```
+"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe" --ignore-certificate-errors
+```
 
 ```
     var ws = new WebSocket('ws://localhost:8090/ws?x-user-id=<userId>');
@@ -36,13 +41,6 @@ docker-compose -f docker-compose_db.yml up
 ```
 
 ## TODOs list
-* Change WebSocket port to 1030
 * Create new entity to save user credentials. User service should retrieve Entity without password.
 * Review and check exception handling
 * Add payload logging
-* Can't connect to ws with SSL
-
-## Notes
-For some reasons in docker-compose password matchers does not work.
-
-It's strange because it works well on when I run jar file on local machine

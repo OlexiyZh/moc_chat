@@ -47,18 +47,23 @@ public class ChatWebSocketHandler extends TextWebSocketHandler implements EventP
 
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) {
         String xUserId = getUserId(session);
-        // connection will always contains query param in uri
-        // we validate it in afterConnectionEstablished method
-        sessions.remove(xUserId);
+        // if session does not contains xUserId query param that means
+        // we did not put this session in map
+        if(StringUtils.isNotBlank(xUserId)) {
+            sessions.remove(xUserId);
+        }
     }
 
     private String getUserId(WebSocketSession session) {
         String query = session.getUri().getQuery();
-        Matcher matcher = QUERY_PARAM_PATTERN.matcher(query);
-        if(matcher.find()) {
-            return matcher.group();
+        if (StringUtils.isBlank(query)) {
+            return null;
         }
-        return null;
+        Matcher matcher = QUERY_PARAM_PATTERN.matcher(query);
+        if(!matcher.find()) {
+            return null;
+        }
+        return matcher.group();
     }
 
     @Override

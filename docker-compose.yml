@@ -4,6 +4,7 @@ services:
     image: moc_chat:1.0.0
     ports:
       - 8090:8090
+      - 1030:8090
     environment:
       - DB_URL=jdbc:postgresql://database:5432/chat
     links:
