@@ -22,6 +22,10 @@ public class UserService {
         return userRepository.existsById(userId);
     }
 
+    public List<User> getUsersWithIds(List<String> userIds) {
+        return userRepository.findByUserIdIn(userIds);
+    }
+
     public boolean isUserExistByUserName(String userName) {
         return userRepository.existsByUserName(userName);
     }

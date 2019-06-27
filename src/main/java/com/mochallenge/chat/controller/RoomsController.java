@@ -1,6 +1,8 @@
 package com.mochallenge.chat.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,8 +20,10 @@ import com.mochallenge.chat.controller.dto.GetRoomResponse;
 import com.mochallenge.chat.controller.dto.RemoveUserFromRoomRequest;
 import com.mochallenge.chat.controller.dto.StringResultResponse;
 import com.mochallenge.chat.domain.Room;
+import com.mochallenge.chat.domain.User;
 import com.mochallenge.chat.mapper.RoomMapper;
 import com.mochallenge.chat.service.RoomService;
+import com.mochallenge.chat.service.UserService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -29,18 +33,27 @@ import lombok.RequiredArgsConstructor;
 public class RoomsController {
 
     private final RoomService roomService;
+    private final UserService userService;
     private final RoomMapper roomMapper;
 
     @GetMapping()
     public GetListOfRoomsResponse getListOfRooms() {
         List<Room> rooms = roomService.getAllRooms();
-        return roomMapper.toGetListOfRoomsResponse(rooms);
+        /* TODO: Refactor this
+        * maybe introduce new Entity with mapping on User just for PL layer
+        */
+        Map<String, List<User>> roomsToUsers = new HashMap<>();
+        for(Room room : rooms) {
+            roomsToUsers.put(room.getRoomId(), userService.getUsersWithIds(room.getUsers()));
+        }
+        return roomMapper.toGetListOfRoomsResponse(rooms, roomsToUsers);
     }
 
     @GetMapping("/{roomId}")
     public GetRoomResponse getRoom(@PathVariable("roomId") String roomId) {
         Room room = roomService.getRoom(roomId);
-        return roomMapper.toGetRoomResponse(room);
+        List<User> users = userService.getUsersWithIds(room.getUsers());
+        return roomMapper.toGetRoomResponse(room, users);
     }
 
     @PostMapping()
