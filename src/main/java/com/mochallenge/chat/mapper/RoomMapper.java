@@ -10,26 +10,27 @@ import com.mochallenge.chat.controller.dto.CreateRoomResponse;
 import com.mochallenge.chat.controller.dto.GetListOfRoomsResponse;
 import com.mochallenge.chat.controller.dto.GetRoomResponse;
 import com.mochallenge.chat.domain.Room;
+import com.mochallenge.chat.domain.RoomQuery;
 
-@Mapper
+@Mapper(uses = UserMapper.class)
 public abstract class RoomMapper {
 
-    public GetListOfRoomsResponse toGetListOfRoomsResponse(List<Room> rooms){
+    public GetListOfRoomsResponse toGetListOfRoomsResponse(List<RoomQuery> roomQueries){
         GetListOfRoomsResponse getListOfRoomsResponse = new GetListOfRoomsResponse();
-        getListOfRoomsResponse.setRooms(toGetRoomResponseList(rooms));
+        getListOfRoomsResponse.setRooms(toGetRoomResponseList(roomQueries));
         return getListOfRoomsResponse;
     }
 
-    public abstract List<GetRoomResponse> toGetRoomResponseList(List<Room> rooms);
+    public abstract List<GetRoomResponse> toGetRoomResponseList(List<RoomQuery> roomQueries);
 
     @Mappings({
             @Mapping(target = "roomId", source = "roomId"),
             @Mapping(target = "roomName", source = "roomName"),
-            @Mapping(target = "creatorId", ignore = true),
-            @Mapping(target = "createdAt", ignore = true),
-            @Mapping(target = "users", ignore = true)
+            @Mapping(target = "creatorId", source = "creatorId"),
+            @Mapping(target = "createdAt", source = "createdAt"),
+            @Mapping(target = "users", source = "users")
     })
-    public abstract GetRoomResponse toGetRoomResponse(Room room);
+    public abstract GetRoomResponse toGetRoomResponse(RoomQuery room);
 
     @Mappings({
             @Mapping(target = "roomId", source = "roomId"),

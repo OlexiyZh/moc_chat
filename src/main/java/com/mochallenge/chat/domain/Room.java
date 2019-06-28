@@ -1,6 +1,6 @@
 package com.mochallenge.chat.domain;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.persistence.CollectionTable;
@@ -37,7 +37,7 @@ public class Room {
     private String creatorId;
 
     @Column
-    private LocalDate createdAt;
+    private LocalDateTime createdAt;
 
     @ElementCollection
     @CollectionTable(name = "users_to_rooms", joinColumns = @JoinColumn(name = "room_id"))
@@ -45,7 +45,7 @@ public class Room {
     private List<String> users;
 
     public Room() {
-        this.createdAt = LocalDate.now();
+        this.createdAt = LocalDateTime.now();
     }
 
 }

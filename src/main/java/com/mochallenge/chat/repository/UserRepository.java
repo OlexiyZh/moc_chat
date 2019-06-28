@@ -1,5 +1,6 @@
 package com.mochallenge.chat.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.repository.CrudRepository;
@@ -11,4 +12,5 @@ import com.mochallenge.chat.domain.User;
 public interface UserRepository extends CrudRepository<User, String> {
     Optional<User> findByUserName(String userName);
     boolean existsByUserName(String userName);
+    List<User> findByUserIdIn(List<String> userIds);
 }

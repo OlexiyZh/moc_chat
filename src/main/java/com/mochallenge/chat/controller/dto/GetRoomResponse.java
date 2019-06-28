@@ -1,6 +1,6 @@
 package com.mochallenge.chat.controller.dto;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
@@ -18,7 +18,7 @@ public class GetRoomResponse {
     private String roomId;
     private String roomName;
     private String creatorId;
-    private LocalDate createdAt;
+    private LocalDateTime createdAt;
     private List<GetUserResponse> users;
 
 }
