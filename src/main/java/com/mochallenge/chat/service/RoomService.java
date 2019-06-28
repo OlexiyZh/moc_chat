@@ -9,8 +9,10 @@ import org.springframework.stereotype.Component;
 
 import com.google.common.collect.Lists;
 import com.mochallenge.chat.domain.Room;
+import com.mochallenge.chat.domain.RoomQuery;
 import com.mochallenge.chat.exception.ChatValidationException;
 import com.mochallenge.chat.exception.ObjectNotFoundException;
+import com.mochallenge.chat.repository.RoomQueryRepository;
 import com.mochallenge.chat.repository.RoomRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -21,6 +23,19 @@ public class RoomService {
 
     private final UserService userService;
     private final RoomRepository roomRepository;
+    private final RoomQueryRepository roomQueryRepository;
+
+    public RoomQuery getRoomQuery(String id) {
+        Optional<RoomQuery> roomQuery = roomQueryRepository.findById(id);
+        if(!roomQuery.isPresent()) {
+            throw new ObjectNotFoundException("Room with id [" + id + "] not found");
+        }
+        return roomQuery.get();
+    }
+
+    public List<RoomQuery> getAllRoomQueries() {
+        return Lists.newArrayList(roomQueryRepository.findAll());
+    }
 
     public Room getRoom(String id) {
         Optional<Room> room = roomRepository.findById(id);

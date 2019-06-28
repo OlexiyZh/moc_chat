@@ -42,6 +42,5 @@ ws.onmessage = function(data) {
 * Push docker image to docker registry
 * Add payload logging
 * Review and check exception handling
-* Refactor approach how we retrieve users information for GET /rooms endpoint
 * Add Swagger
 * Create new entity to save user credentials. User service should retrieve Entity without password.

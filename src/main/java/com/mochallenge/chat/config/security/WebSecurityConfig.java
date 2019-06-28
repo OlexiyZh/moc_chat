@@ -11,8 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth, DaoAuthenticationProvider authenticationProvider)
-            throws Exception {
+    public void configureGlobal(AuthenticationManagerBuilder auth, DaoAuthenticationProvider authenticationProvider) {
         auth.authenticationProvider(authenticationProvider);
     }
 
@@ -22,7 +21,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             // Disable CSRF protection
             .csrf().disable()
             .authorizeRequests()
-            .antMatchers("/users/login", "/users/register", "/ws").permitAll()
+            .antMatchers("/login", "/register", "/ws").permitAll()
             .anyRequest().authenticated()
             .and()
             .httpBasic();
