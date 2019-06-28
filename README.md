@@ -20,7 +20,8 @@ Next env variables can be overrided:
 docker build -t moc_chat:1.0.0 .
 docker build -t alexeyzh/moc_chat:1.0.0 .
 
-docker push alexeyzh/moc_chat:1.0.
+docker login --username=alexeyzh
+docker push alexeyzh/moc_chat:1.0.0
 
 docker run -d -p 8090:8090 -p 1030:8090 --name moc_chat moc_chat:1.0.0
 
