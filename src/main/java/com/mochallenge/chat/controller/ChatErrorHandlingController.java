@@ -43,7 +43,7 @@ public class ChatErrorHandlingController {
 
     @ExceptionHandler(ChatValidationException.class)
     @ResponseBody
-    public Map handleChatValidationException(ObjectNotFoundException exc, HttpServletResponse response) {
+    public Map handleChatValidationException(ChatValidationException exc, HttpServletResponse response) {
 
         return buildError(exc, response, HttpStatus.BAD_REQUEST);
     }
@@ -58,7 +58,7 @@ public class ChatErrorHandlingController {
         log.error(exc.getMessage(), exc);
         response.setStatus(httpStatus.value());
 
-        ImmutableMap.Builder<Object, Object> builder =  ImmutableMap.builder()
+        ImmutableMap.Builder<Object, Object> builder = ImmutableMap.builder()
                 .put(TIMESTAMP_FIELD_NAME, LocalDate.now())
                 .put(ERROR_FIELD_NAME, httpStatus.getReasonPhrase())
                 .put(EXCEPTION_FIELD_NAME, exc.getClass().getCanonicalName())
