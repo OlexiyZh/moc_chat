@@ -1,7 +1,7 @@
 version: '3'
 services:
   moc_chat:
-    image: alexeyzh/moc_chat:1.0.0
+    image: moc_chat:1.0.0
     ports:
       - 8090:8090
       - 1030:8090

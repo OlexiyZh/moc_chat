@@ -6,6 +6,7 @@ Default port: 8090
 1. Execute mvn clean package in root folder with pom.xml
 2. Build docker image for moc_chat application
 3. Start docker-compose.yml
+4. Disable SSL certificate verification in Postman if you use this tool for testing
 
 Next env variables can be overrided:
 * DB_URL
@@ -17,10 +18,12 @@ Next env variables can be overrided:
 
 ```
 docker build -t moc_chat:1.0.0 .
+docker build -t alexeyzh/moc_chat:1.0.0 .
 
 docker run -d -p 8090:8090 -p 1030:8090 --name moc_chat moc_chat:1.0.0
 
 docker-compose up
+docker-compose -f docker-compose_local.yml up
 docker-compose -f docker-compose_db.yml up
 ```
 
@@ -46,3 +49,4 @@ http://localhost:8090/swagger-ui.html
 * Push docker image to docker registry
 * Add masking sensitive data for payload logging
 * Create new entity to save user credentials. User service should retrieve Entity without password.
+* Swagger and Spring Security does not work correctly. Swagger ask fot authorization and when you cancel it works
