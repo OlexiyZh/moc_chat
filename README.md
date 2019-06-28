@@ -44,6 +44,5 @@ http://localhost:8090/swagger-ui.html
 
 ## TODOs list
 * Push docker image to docker registry
-* Add payload logging
-* Add Swagger
+* Add masking sensitive data for payload logging
 * Create new entity to save user credentials. User service should retrieve Entity without password.
