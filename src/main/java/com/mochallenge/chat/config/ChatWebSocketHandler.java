@@ -37,18 +37,17 @@ public class ChatWebSocketHandler extends TextWebSocketHandler implements EventP
     @SneakyThrows
     public void afterConnectionEstablished(WebSocketSession session) {
         String xUserId = getUserId(session);
-        if(StringUtils.isBlank(xUserId)) {
+        if(StringUtils.isNotBlank(xUserId)) {
+            sessions.put(xUserId, session);
+        } else {
             // close session because mandatory parameter is missing
             session.close(CloseStatus.BAD_DATA);
         }
-        sessions.put(xUserId, session);
     }
 
 
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) {
         String xUserId = getUserId(session);
-        // if session does not contains xUserId query param that means
-        // we did not put this session in map
         if(StringUtils.isNotBlank(xUserId)) {
             sessions.remove(xUserId);
         }

@@ -21,7 +21,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             // Disable CSRF protection
             .csrf().disable()
             .authorizeRequests()
-            .antMatchers("/login", "/register", "/ws").permitAll()
+            .antMatchers("/login", "/register").permitAll()
+            .antMatchers("/ws").permitAll()
+            .antMatchers("/swagger-ui.html").permitAll()
             .anyRequest().authenticated()
             .and()
             .httpBasic();

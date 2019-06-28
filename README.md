@@ -38,6 +38,10 @@ ws.onmessage = function(data) {
 };
 ```
 
+## API Specification
+
+http://localhost:8090/swagger-ui.html
+
 ## TODOs list
 * Push docker image to docker registry
 * Add payload logging

@@ -8,7 +8,7 @@ import com.mochallenge.chat.controller.dto.LoginUserResponse;
 import com.mochallenge.chat.service.SecurityService;
 
 @Mapper
-public abstract class SecurityMapper {
+public abstract class ChatSecurityMapper {
 
     @Mappings({
             @Mapping(target = "userId", source = "user.userId"),
