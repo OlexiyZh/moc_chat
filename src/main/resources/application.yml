@@ -16,3 +16,11 @@ spring:
 
   jackson:
     default-property-inclusion: non_null
+
+
+chat:
+  bot:
+    dialogflow:
+      clientEmail: ${DIALOGFLOW_CLIENT_EMAIL:moc-chat-hubdau@appspot.gserviceaccount.com}
+      privateKey: ${DIALOGFLOW_PRIVATE_KEY}
+      projectId: ${DIALOGFLOW_PROJECT_ID:moc-chat-hubdau}
