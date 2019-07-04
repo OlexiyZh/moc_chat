@@ -21,6 +21,6 @@ spring:
 chat:
   bot:
     dialogflow:
-      clientEmail: ${DIALOGFLOW_CLIENT_EMAIL:moc-chat-hubdau@appspot.gserviceaccount.com}
+      clientEmail: ${DIALOGFLOW_CLIENT_EMAIL:chat-bot-client@moc-chat-hubdau.iam.gserviceaccount.com}
       privateKey: ${DIALOGFLOW_PRIVATE_KEY}
       projectId: ${DIALOGFLOW_PROJECT_ID:moc-chat-hubdau}

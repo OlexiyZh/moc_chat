@@ -48,6 +48,16 @@ ws.onmessage = function(data) {
 
 http://localhost:8090/swagger-ui.html
 
+## Chat bots configuration
+
+2 chat bot are available:
+* Echobot
+* Dialogflow bot
+
+To address you message to Echo bot you need add @echobot before you message
+
+To address you message to Dialogflow bot you need add @bot before you message
+
 ## TODOs list
 * Push docker image to docker registry
 * Add masking sensitive data for payload logging
