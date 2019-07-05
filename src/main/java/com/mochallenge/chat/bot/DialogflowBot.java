@@ -7,6 +7,7 @@ import javax.annotation.PostConstruct;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 import com.google.api.gax.core.CredentialsProvider;
@@ -26,6 +27,7 @@ import com.mochallenge.chat.service.message.event.MessageSentEvent;
 import lombok.SneakyThrows;
 
 @Component
+@ConditionalOnProperty(value="chat.bot.dialogflow.enabled", havingValue = "true")
 public class DialogflowBot implements ChatBot {
 
     private final static String BOT_ALIAS = "@bot";

@@ -58,6 +58,10 @@ To address you message to Echo bot you need add @echobot before you message
 
 To address you message to Dialogflow bot you need add @bot before you message
 
+Each bot can be disable. You need set `false` value into `DIALOGFLOW_BOT_ENABLED` or `ECHOBOT_ENABLED` to disable corresponding bot.
+
+By default all bots are enabled.
+
 ## TODOs list
 * Push docker image to docker registry
 * Add masking sensitive data for payload logging

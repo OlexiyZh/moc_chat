@@ -3,12 +3,14 @@ package com.mochallenge.chat.bot;
 import java.util.Optional;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 import com.mochallenge.chat.service.message.event.ChatEvent;
 import com.mochallenge.chat.service.message.event.MessageSentEvent;
 
 @Component
+@ConditionalOnProperty(value="chat.bot.echobot.enabled", havingValue = "true")
 public class EchoBot implements ChatBot {
 
     private final static String BOT_ALIAS = "@echobot";

@@ -21,6 +21,10 @@ spring:
 chat:
   bot:
     dialogflow:
-      clientEmail: ${DIALOGFLOW_CLIENT_EMAIL:chat-bot-client@moc-chat-hubdau.iam.gserviceaccount.com}
-      privateKey: ${DIALOGFLOW_PRIVATE_KEY}
-      projectId: ${DIALOGFLOW_PROJECT_ID:moc-chat-hubdau}
+      enabled: ${DIALOGFLOW_BOT_ENABLED:true}
+      clientEmail: ${DIALOGFLOW_BOT_CLIENT_EMAIL:chat-bot-client@moc-chat-hubdau.iam.gserviceaccount.com}
+      privateKey: ${DIALOGFLOW_BOT_PRIVATE_KEY}
+      projectId: ${DIALOGFLOW_BOT_PROJECT_ID:moc-chat-hubdau}
+
+    echobot:
+      enabled: ${ECHOBOT_ENABLED:true}

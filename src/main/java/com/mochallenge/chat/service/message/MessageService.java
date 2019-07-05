@@ -34,7 +34,7 @@ public class MessageService {
         ChatEvent messageSentEvent = new MessageSentEvent(userId, roomId, message);
         eventPublisher.publishEvent(messageSentEvent, room.getUsers());
 
-        for (ChatBot bot : chatBots) {
+        for (ChatBot bot : CollectionUtils.emptyIfNull(chatBots)) {
             bot.processEvent(messageSentEvent).ifPresent(event -> eventPublisher.publishEvent(event, room.getUsers()));
         }
     }
