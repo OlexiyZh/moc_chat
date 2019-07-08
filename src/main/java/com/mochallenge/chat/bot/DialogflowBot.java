@@ -77,10 +77,8 @@ public class DialogflowBot implements ChatBot {
     private String getAgentResponse(ChatEvent event) {
         String fulfillmentText;
         try (SessionsClient sessionsClient = SessionsClient.create(this.sessionsSettings)) {
-            // TODO: Generate sessionId based on roomId
-            String sessionId = UUID.randomUUID().toString();
+            String sessionId = getSessionId(event);
             SessionName session = SessionName.of(projectId, sessionId);
-
             String queryInputMessage = replaceBotNameFromMessage(event.getMessage());
             TextInput textInput = TextInput.newBuilder()
                     .setText(queryInputMessage)
@@ -103,6 +101,11 @@ public class DialogflowBot implements ChatBot {
 
     private boolean shouldRespond(ChatEvent event) {
         return StringUtils.startsWith(event.getMessage(), BOT_ALIAS);
+    }
+
+    private String getSessionId(ChatEvent event) {
+        // TODO: Refactor this logic
+        return event.getRoomId();
     }
 
 }
