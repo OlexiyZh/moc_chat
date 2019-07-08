@@ -29,15 +29,11 @@ public class DialogflowBot implements ChatBot {
             return Optional.empty();
         }
 
-        String message = replaceBotNameFromMessage(event.getMessage());
-        String sessionId = DialogflowUtils.getSessionId(event);
-        DialogflowSessionContext context = dialogflowSessionContextProvider.getContext(sessionId);
+        String response = processIncomeEvent(event);
 
-        String agentResponse = dialogflowAgentClient.sendTextMessage(context, message);
-
-        return StringUtils.isBlank(agentResponse) ?
+        return StringUtils.isBlank(response) ?
                 Optional.empty() :
-                Optional.of(new MessageSentEvent(BOT_ALIAS, event.getRoomId(), agentResponse));
+                Optional.of(new MessageSentEvent(BOT_ALIAS, event.getRoomId(), response));
     }
 
     private String replaceBotNameFromMessage(String message) {
@@ -48,4 +44,25 @@ public class DialogflowBot implements ChatBot {
         return StringUtils.startsWith(event.getMessage(), BOT_ALIAS);
     }
 
+    private String processIncomeEvent(ChatEvent event) {
+        String message = replaceBotNameFromMessage(event.getMessage());
+        String sessionId = DialogflowUtils.getSessionId(event);
+        DialogflowSessionContext context = dialogflowSessionContextProvider.getContext(sessionId);
+
+        // TODO: Refactor this code
+        String response;
+        if (message.toLowerCase().contains("switch to ukrainian")) {
+            context = context.withLanguageCode(DialogflowSessionContextProvider.UKRAINIAN_LANGUAGE_CODE);
+            dialogflowSessionContextProvider.updateContext(context);
+            response = "Гаразд. Далі українською";
+        } else if (message.toLowerCase().contains("перейти на англійську")) {
+            context = context.withLanguageCode(DialogflowSessionContextProvider.ENGLISH_LANGUAGE_CODE);
+            dialogflowSessionContextProvider.updateContext(context);
+            response = "Ok. I will use English now";
+        } else {
+            response = dialogflowAgentClient.sendTextMessage(context, message);
+        }
+
+        return response;
+    }
 }

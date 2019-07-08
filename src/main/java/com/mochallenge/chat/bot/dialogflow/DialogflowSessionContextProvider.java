@@ -10,7 +10,10 @@ import org.springframework.stereotype.Component;
 @ConditionalOnBean(DialogflowBot.class)
 public class DialogflowSessionContextProvider {
 
-    private static final String DEFAULT_LANGUAGE_CODE = "en-US";
+    public static final String ENGLISH_LANGUAGE_CODE = "en-US";
+    public static final String UKRAINIAN_LANGUAGE_CODE = "uk";
+
+    private static final String DEFAULT_LANGUAGE_CODE = ENGLISH_LANGUAGE_CODE;
 
     private Map<String, DialogflowSessionContext> contexts = new ConcurrentHashMap();
 
@@ -26,6 +29,7 @@ public class DialogflowSessionContextProvider {
     }
 
     public void updateContext(DialogflowSessionContext context) {
-        // TODO: Validate parameters and context
+        // TODO: Validate parameter
+        contexts.put(context.getSessionId(), context);
     }
 }
