@@ -18,6 +18,7 @@ import com.google.cloud.dialogflow.v2.SessionsClient;
 import com.google.cloud.dialogflow.v2.SessionsSettings;
 import com.google.cloud.dialogflow.v2.TextInput;
 
+import lombok.NonNull;
 import lombok.SneakyThrows;
 
 @Component
@@ -51,8 +52,7 @@ public class DialogflowAgentClient {
     }
 
     @SneakyThrows
-    public String sendTextMessage(DialogflowSessionContext context, String message) {
-        // TODO: Add parameters validation
+    public String sendTextMessage(@NonNull DialogflowSessionContext context, @NonNull String message) {
         String fulfillmentText;
         try (SessionsClient sessionsClient = SessionsClient.create(this.sessionsSettings)) {
             SessionName session = SessionName.of(projectId, context.getSessionId());

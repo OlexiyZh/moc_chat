@@ -6,6 +6,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Component;
 
+import lombok.NonNull;
+
 @Component
 @ConditionalOnBean(DialogflowBot.class)
 public class DialogflowSessionContextProvider {
@@ -15,10 +17,10 @@ public class DialogflowSessionContextProvider {
 
     private static final String DEFAULT_LANGUAGE_CODE = ENGLISH_LANGUAGE_CODE;
 
+    // TODO: Expire session after some time
     private Map<String, DialogflowSessionContext> contexts = new ConcurrentHashMap();
 
-    public DialogflowSessionContext getContext(String sessionId) {
-        // TODO: Validate parameters
+    public DialogflowSessionContext getContext(@NonNull String sessionId) {
         DialogflowSessionContext context = contexts.get(sessionId);
         if (context == null) {
             context = new DialogflowSessionContext(sessionId, DEFAULT_LANGUAGE_CODE);
@@ -28,8 +30,7 @@ public class DialogflowSessionContextProvider {
         return context;
     }
 
-    public void updateContext(DialogflowSessionContext context) {
-        // TODO: Validate parameter
+    public void updateContext(@NonNull DialogflowSessionContext context) {
         contexts.put(context.getSessionId(), context);
     }
 }
