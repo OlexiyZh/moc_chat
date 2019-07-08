@@ -1,13 +1,9 @@
-package com.mochallenge.chat.bot;
-
-import java.util.Optional;
-import java.util.UUID;
+package com.mochallenge.chat.bot.dialogflow;
 
 import javax.annotation.PostConstruct;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Component;
 
 import com.google.api.gax.core.CredentialsProvider;
@@ -21,17 +17,12 @@ import com.google.cloud.dialogflow.v2.SessionName;
 import com.google.cloud.dialogflow.v2.SessionsClient;
 import com.google.cloud.dialogflow.v2.SessionsSettings;
 import com.google.cloud.dialogflow.v2.TextInput;
-import com.mochallenge.chat.service.message.event.ChatEvent;
-import com.mochallenge.chat.service.message.event.MessageSentEvent;
 
 import lombok.SneakyThrows;
 
 @Component
-@ConditionalOnProperty(value="chat.bot.dialogflow.enabled", havingValue = "true")
-public class DialogflowBot implements ChatBot {
-
-    private final static String BOT_ALIAS = "@bot";
-    private final static String BOT_ALIAS_REPLACEMENT_REGEX = BOT_ALIAS + " ?";
+@ConditionalOnBean(DialogflowBot.class)
+public class DialogflowAgentClient {
 
     @Value("${chat.bot.dialogflow.clientEmail}")
     private String clientEmail;
@@ -41,8 +32,6 @@ public class DialogflowBot implements ChatBot {
 
     @Value("${chat.bot.dialogflow.projectId}")
     private String projectId;
-
-    private String languageCode = "en-US";
 
     private SessionsSettings sessionsSettings;
 
@@ -61,28 +50,15 @@ public class DialogflowBot implements ChatBot {
         this.sessionsSettings = SessionsSettings.newBuilder().setCredentialsProvider(credentialsProvider).build();
     }
 
-    @Override
-    public Optional<ChatEvent> processEvent(ChatEvent event) {
-        if (!shouldRespond(event)) {
-            return Optional.empty();
-        }
-
-        String agentResponse = getAgentResponse(event);
-        return StringUtils.isBlank(agentResponse) ?
-                Optional.empty() :
-                Optional.of(new MessageSentEvent(BOT_ALIAS, event.getRoomId(), agentResponse));
-    }
-
     @SneakyThrows
-    private String getAgentResponse(ChatEvent event) {
+    public String sendTextMessage(DialogflowSessionContext context, String message) {
+        // TODO: Add parameters validation
         String fulfillmentText;
         try (SessionsClient sessionsClient = SessionsClient.create(this.sessionsSettings)) {
-            String sessionId = getSessionId(event);
-            SessionName session = SessionName.of(projectId, sessionId);
-            String queryInputMessage = replaceBotNameFromMessage(event.getMessage());
+            SessionName session = SessionName.of(projectId, context.getSessionId());
             TextInput textInput = TextInput.newBuilder()
-                    .setText(queryInputMessage)
-                    .setLanguageCode(languageCode)
+                    .setText(message)
+                    .setLanguageCode(context.getLanguageCode())
                     .build();
 
             QueryInput queryInput = QueryInput.newBuilder().setText(textInput).build();
@@ -94,18 +70,4 @@ public class DialogflowBot implements ChatBot {
 
         return fulfillmentText;
     }
-
-    private String replaceBotNameFromMessage(String message) {
-        return message.replaceFirst(BOT_ALIAS_REPLACEMENT_REGEX, "");
-    }
-
-    private boolean shouldRespond(ChatEvent event) {
-        return StringUtils.startsWith(event.getMessage(), BOT_ALIAS);
-    }
-
-    private String getSessionId(ChatEvent event) {
-        // TODO: Refactor this logic
-        return event.getRoomId();
-    }
-
 }
