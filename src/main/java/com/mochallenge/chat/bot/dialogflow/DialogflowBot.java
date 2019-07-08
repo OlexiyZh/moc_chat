@@ -51,11 +51,13 @@ public class DialogflowBot implements ChatBot {
 
         // TODO: Refactor this code
         String response;
-        if (message.toLowerCase().contains("switch to ukrainian")) {
+        if (DialogflowSessionContextProvider.ENGLISH_LANGUAGE_CODE.equals(context.getLanguageCode())
+                && message.toLowerCase().contains("switch to ukrainian")) {
             context = context.withLanguageCode(DialogflowSessionContextProvider.UKRAINIAN_LANGUAGE_CODE);
             dialogflowSessionContextProvider.updateContext(context);
             response = "Гаразд. Далі українською";
-        } else if (message.toLowerCase().contains("перейти на англійську")) {
+        } else if (DialogflowSessionContextProvider.UKRAINIAN_LANGUAGE_CODE.equals(context.getLanguageCode())
+                && message.toLowerCase().contains("перейти на англійську")) {
             context = context.withLanguageCode(DialogflowSessionContextProvider.ENGLISH_LANGUAGE_CODE);
             dialogflowSessionContextProvider.updateContext(context);
             response = "Ok. I will use English now";
@@ -65,4 +67,5 @@ public class DialogflowBot implements ChatBot {
 
         return response;
     }
+
 }
