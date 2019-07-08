@@ -62,8 +62,28 @@ Each bot can be disable. You need set `false` value into `DIALOGFLOW_BOT_ENABLED
 
 By default all bots are enabled.
 
+#### Dialogflow bot
+Bot can manage context:
+```
+>> @bot My name is John
+>> Got it
+>> @bot What's my name?
+>> Your name is John
+```
+
+Bot supports switching languages:
+```
+>> @bot switch to ukrainian
+>> Гаразд. Далі українською
+>> @bot Привіт
+>> Вітаю!
+>> @bot ok. Перейти на англійську
+>> Ok. I will use English now
+```
+
 ## TODOs list
 * Push docker image to docker registry
 * Add masking sensitive data for payload logging
 * Create new entity to save user credentials. User service should retrieve Entity without password.
 * Swagger and Spring Security does not work correctly. Swagger ask fot authorization and when you cancel it works
+* Refactor Dialogflow bot
