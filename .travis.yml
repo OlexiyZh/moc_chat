@@ -14,12 +14,12 @@ script:
   - mvn clean package
 # Create Docker image and push it to Dockerhub repository
 after_success:
-  - export пше икфт=${TRAVIS_COMMIT::7}
+  - export COMMIT=${TRAVIS_COMMIT::7}
 #  - export TAG=`if [ ! -z "$TRAVIS_TAG" ]; then echo "$TRAVIS_TAG"; else echo "$TRAVIS_BRANCH--$COMMIT"; fi`
   - export TAG=1.0.0
   - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
-  - docker build -t $IMAGE_NAME:$TAG .
-#  - docker tag $IMAGE_NAME:latest $IMAGE_NAME:$TAG
+  - docker build -t $IMAGE_NAME .
+  - docker tag $IMAGE_NAME:latest $IMAGE_NAME:$TAG
   - docker push moc_chat:$TAG
   - export TITLE="$IMAGE_NAME:$TAG is built properly and pushed to Dockerhub"
   - export TIMESTAMP=`date`
