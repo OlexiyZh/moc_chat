@@ -20,7 +20,7 @@ after_success:
   - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
   - docker build -t $IMAGE_NAME .
   - docker tag $IMAGE_NAME:latest $IMAGE_NAME:$TAG
-  - docker push moc_chat:$TAG
+  - docker push $IMAGE_NAME:$TAG
   - export TITLE="$IMAGE_NAME:$TAG is built properly and pushed to Dockerhub"
   - export TIMESTAMP=`date`
   - export GIT_LOG=`git log -1 --pretty=%B $COMMIT`
