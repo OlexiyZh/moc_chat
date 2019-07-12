@@ -1,6 +1,7 @@
 package com.mochallenge.chat.bot.dialogflow;
 
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -24,7 +25,11 @@ public class DialogflowBot implements ChatBot {
     private final DialogflowAgentClient dialogflowAgentClient;
 
     @Override
-    public Optional<ChatEvent> processEvent(ChatEvent event) {
+    public CompletableFuture<Optional<ChatEvent>> processEvent(ChatEvent event) {
+        return CompletableFuture.supplyAsync(() -> this.processEventInternal(event));
+    }
+
+    private Optional<ChatEvent> processEventInternal(ChatEvent event) {
         if (!shouldRespond(event)) {
             return Optional.empty();
         }

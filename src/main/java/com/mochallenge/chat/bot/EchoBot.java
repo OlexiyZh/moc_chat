@@ -1,6 +1,7 @@
 package com.mochallenge.chat.bot;
 
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -17,11 +18,14 @@ public class EchoBot implements ChatBot {
     private final static String BOT_ALIAS_REPLACEMENT_REGEX = BOT_ALIAS + " ?";
 
     @Override
-    public Optional<ChatEvent> processEvent(ChatEvent event) {
+    public CompletableFuture<Optional<ChatEvent>> processEvent(ChatEvent event) {
+        return CompletableFuture.supplyAsync(() -> this.processEventInternal(event));
+    }
+
+    private Optional<ChatEvent> processEventInternal(ChatEvent event) {
         if (!shouldRespond(event)) {
             return Optional.empty();
         }
-
         return Optional.of(buildResponseMessage(event));
     }
 

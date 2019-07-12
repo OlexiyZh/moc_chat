@@ -1,6 +1,7 @@
 package com.mochallenge.chat.service.message;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Component;
@@ -35,7 +36,11 @@ public class MessageService {
         eventPublisher.publishEvent(messageSentEvent, room.getUsers());
 
         for (ChatBot bot : CollectionUtils.emptyIfNull(chatBots)) {
-            bot.processEvent(messageSentEvent).ifPresent(event -> eventPublisher.publishEvent(event, room.getUsers()));
+            bot.processEvent(messageSentEvent).thenAccept(optionalChatEvent -> this.publishEvent(optionalChatEvent, room));
         }
+    }
+
+    private void publishEvent(Optional<ChatEvent> optionalChatEvent, Room room) {
+        optionalChatEvent.ifPresent(event -> eventPublisher.publishEvent(event, room.getUsers()));
     }
 }
