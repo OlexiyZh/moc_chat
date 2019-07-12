@@ -1,5 +1,31 @@
 language: java
+jdk:
+  - openjdk8
+services:
+  - docker
 
-jdk: openjdk8
-
-script: mvn clean install
+env:
+  global:
+    - DOCKER_USER=alexeyzh
+    - secure: "Ii3pkiVBaFXLRZ9RTswyiJfg365gUsZ1swncU0sB0nWVJ/4ZMCMD/4os3Agi+OxPVJbQccU5YSjriHNrVA5M3hvUxmWRQl4qVSYb4Y+wBXUdTPWjioWZ1m7o1Q5Qx1tcPlUBphJ/qae7OTOh4LWNcDaHlutTzflVnKgnIGSTx9r83Lk36yo/Rav776RyW6NVXltx5zLVCT2lM73BIsA8Jzin4yI48L4b46BSYxT58kOy3Rl+8tybJaQqUJc/PbkBL7Plxn8uARqdLC+pbbSwkvvxwvbie0gW+/YalNg3s+y+6D98W/85c8xMZA+Obvvv4m457/BumdIEebf6T34pHzAP8RHG5IDNP/12LN0FtlNDVFpLe40Ct3+MAyTzUYiA30aBZRpch1jBCIkujmD9p/iZLr3AaSCOLIT0V/zmYz8mna4e/FRfsqzMcRj+Iaf0eVaObiCCkStCuCWSna6O55ciKoPt34+7dzb3tXZzbMCjCcLJBuZktQfPMe/2594/MwGDvjMfU5lcsE5gVXtKF/W9DfY5I67J3XrBQa7t3zjrba31z+Sqo/FnrfowanEq/xUO8pCzgVLh4BrC5n675EUDSZH5KqED16MMeej94FPFw444wKz0oj7EDKwWMoo5Nu1P9Z9PP/vxdc12ieM/uM23wBmYHZdQWNyBi3hib1w="
+    - IMAGE_NAME=alexeyzh/moc_chat
+# Build SpringBoot application
+script:
+  - mvn clean package
+# Create Docker image and push it to Dockerhub repository
+after_success:
+  - export пше икфт=${TRAVIS_COMMIT::7}
+#  - export TAG=`if [ ! -z "$TRAVIS_TAG" ]; then echo "$TRAVIS_TAG"; else echo "$TRAVIS_BRANCH--$COMMIT"; fi`
+  - export TAG=1.0.0
+  - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+  - docker build -t $IMAGE_NAME:$TAG .
+#  - docker tag $IMAGE_NAME:latest $IMAGE_NAME:$TAG
+  - docker push moc_chat:$TAG
+  - export TITLE="$IMAGE_NAME:$TAG is built properly and pushed to Dockerhub"
+  - export TIMESTAMP=`date`
+  - export GIT_LOG=`git log -1 --pretty=%B $COMMIT`
+  - export TEXT="[build version] $TAG<br />[datetime] $TIMESTAMP<br />[changelog] $GIT_LOG<br />"
+# If the `script` job fails, it will send a failure message to Teams channel
+after_failure:
+  - export TITLE="Travis:$TRAVIS_JOB_ID -- build job is failed"
+  - export TEXT=[datetime]:`date`
