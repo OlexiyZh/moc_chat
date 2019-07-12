@@ -1,5 +1,4 @@
 # Chat application for MocBackendChallenge
-=================
 [![Build Status](https://travis-ci.org/OlexiyZh/moc_chat.svg?branch=master)](https://travis-ci.org/OlexiyZh/moc_chat)
 
 -----------------
