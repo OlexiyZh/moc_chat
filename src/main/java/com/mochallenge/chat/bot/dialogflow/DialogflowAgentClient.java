@@ -52,8 +52,8 @@ public class DialogflowAgentClient {
     }
 
     @SneakyThrows
-    public String sendTextMessage(@NonNull DialogflowSessionContext context, @NonNull String message) {
-        String fulfillmentText;
+    public QueryResult sendTextMessage(@NonNull DialogflowSessionContext context, @NonNull String message) {
+        QueryResult queryResult;
         try (SessionsClient sessionsClient = SessionsClient.create(this.sessionsSettings)) {
             SessionName session = SessionName.of(projectId, context.getSessionId());
             TextInput textInput = TextInput.newBuilder()
@@ -64,10 +64,9 @@ public class DialogflowAgentClient {
             QueryInput queryInput = QueryInput.newBuilder().setText(textInput).build();
             DetectIntentResponse response = sessionsClient.detectIntent(session, queryInput);
 
-            QueryResult queryResult = response.getQueryResult();
-            fulfillmentText = queryResult.getFulfillmentText();
+            queryResult = response.getQueryResult();
         }
 
-        return fulfillmentText;
+        return queryResult;
     }
 }

@@ -22,9 +22,12 @@ chat:
   bot:
     dialogflow:
       enabled: ${DIALOGFLOW_BOT_ENABLED:true}
-      clientEmail: ${DIALOGFLOW_BOT_CLIENT_EMAIL:chat-bot-client@moc-chat-hubdau.iam.gserviceaccount.com}
+      clientEmail: ${DIALOGFLOW_BOT_CLIENT_EMAIL:dialogflow-kpkogm@order-agent-fmwcjt.iam.gserviceaccount.com}
       privateKey: ${DIALOGFLOW_BOT_PRIVATE_KEY}
-      projectId: ${DIALOGFLOW_BOT_PROJECT_ID:moc-chat-hubdau}
+      projectId: ${DIALOGFLOW_BOT_PROJECT_ID:order-agent-fmwcjt}
 
     echobot:
       enabled: ${ECHOBOT_ENABLED:true}
+
+  notification:
+    delayInSeconds: 5
